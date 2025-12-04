@@ -89,34 +89,106 @@ document.addEventListener('DOMContentLoaded', () => {
             disableOnInteraction: false,
         },
     });
+
+    // swiper
+    const bg__text__swiper = new Swiper(".bg__text--swiper", {
+        loop: true,
+        slidesPerView: 1,
+        spaceBetween: 0,
+        width: 2940,
+        speed: 50000,
+        allowTouchMove: false,
+        autoplay: {
+            delay: 0,
+            disableOnInteraction: false,
+        },
+    });
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    // タブのボタン全部を取得
-    const tabButtons = document.querySelectorAll(".point__button li");
-    const tabImages = document.querySelectorAll(".point__img li");
-    const tabTexts = document.querySelectorAll(".point__text li");
 
-    // 最初の状態をアクティブに
-    tabImages[0].classList.add("active");
-    tabTexts[0].classList.add("active");
-    tabButtons[0].classList.add("active");
+    const concept = document.querySelector(".concept");
 
-    // ボタンをクリックしたら対応するタブを表示
-    tabButtons.forEach((button, index) => {
-        button.addEventListener("click", () => {
-            // いったん全部リセット
-            tabButtons.forEach((btn) => btn.classList.remove("active"));
-            tabImages.forEach((img) => img.classList.remove("active"));
-            tabTexts.forEach((txt) => txt.classList.remove("active"));
+    const items = [
+        {
+            img: document.querySelector(".point__heart"),
+            on_btn: document.querySelector(".point__heart--button .on"),
+            off_btn: document.querySelector(".point__heart--button .off"),
+            txt: document.querySelector(".point__heart--text")
+        },
+        {
+            img: document.querySelector(".point__music"),
+            on_btn: document.querySelector(".point__music--button .on"),
+            off_btn: document.querySelector(".point__music--button .off"),
+            txt: document.querySelector(".point__music--text")
+        },
+        {
+            img: document.querySelector(".point__body"),
+            on_btn: document.querySelector(".point__body--button .on"),
+            off_btn: document.querySelector(".point__body--button .off"),
+            txt: document.querySelector(".point__body--text")
+        }
+    ];
 
-            // クリックされたものだけアクティブに
-            button.classList.add("active");
-            tabImages[index].classList.add("active");
-            tabTexts[index].classList.add("active");
+    function showItem(index) {
+        items.forEach((item, i) => {
+            const isActive = (i === index);
+
+            item.img.style.display = isActive ? "block" : "none";
+            item.txt.style.display = isActive ? "block" : "none";
+
+            item.on_btn.style.display = isActive ? "block" : "none";
+            item.off_btn.style.display = isActive ? "none" : "block";
         });
+    }
+
+    // 最初は heart を表示
+    showItem(0);
+
+    // concept の高さ
+    const conceptHeight = concept.offsetHeight;
+
+    // 区間の設定（調整済み）
+    const heartEnd = conceptHeight * 0.45;
+    const musicEnd = conceptHeight * 0.70;
+
+    // スクロール動作
+    window.addEventListener("scroll", () => {
+        const rect = concept.getBoundingClientRect();
+        const progress = -rect.top;
+
+        if (progress < heartEnd) {
+            showItem(0);
+        } else if (progress < musicEnd) {
+            showItem(1);
+        } else {
+            showItem(2);
+        }
     });
+
+    // OFF ボタン → スクロール移動
+    const sectionTop = concept.offsetTop;
+
+    document.querySelector(".point__heart--button .off").addEventListener("click", () => {
+        const offset = conceptHeight / 4;
+        const targetTop = sectionTop + offset;
+        window.scrollTo({ top: targetTop, behavior: "smooth" });
+    });
+
+    document.querySelector(".point__music--button .off").addEventListener("click", () => {
+        const offset = 0;
+        const targetTop = sectionTop + offset;
+        window.scrollTo({ top: targetTop + heartEnd, behavior: "smooth" });
+    });
+
+    document.querySelector(".point__body--button .off").addEventListener("click", () => {
+        const offset = 0;
+        const targetTop = sectionTop + offset;
+        window.scrollTo({ top: targetTop + musicEnd, behavior: "smooth" });
+    });
+
 });
+
 
 document.addEventListener("DOMContentLoaded", () => {
     // 要素の取得
@@ -164,4 +236,215 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const fades = document.querySelectorAll(".fade");
+
+    function checkFade() {
+        const scroll = window.scrollY;
+        const wHeight = window.innerHeight;
+
+        fades.forEach((el) => {
+            const hit = el.getBoundingClientRect().top + scroll;
+            let customTop = 100;
+            const fadeAttr = el.dataset.fade;
+
+            if (fadeAttr !== undefined) {
+                customTop = Number(fadeAttr);
+            }
+
+            if (hit + customTop < wHeight + scroll) {
+                el.classList.add("is-active");
+            }
+        });
+    }
+
+    // 初回実行（ページロード時）
+    checkFade();
+
+    // スクロール時にも実行
+    window.addEventListener("scroll", checkFade);
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const fades = document.querySelectorAll(".bg_fade");
+
+    function checkFade() {
+        const scroll = window.scrollY;
+        const wHeight = window.innerHeight;
+
+        fades.forEach((el) => {
+            const hit = el.getBoundingClientRect().top + scroll;
+            let customTop = 100;
+            const fadeAttr = el.dataset.fade;
+
+            if (fadeAttr !== undefined) {
+                customTop = Number(fadeAttr);
+            }
+
+            // 範囲内に入ったら is-active を付与
+            // 範囲外に出たら is-active を削除
+            if (hit + customTop < wHeight + scroll && hit + customTop + el.offsetHeight > scroll) {
+                el.classList.add("is-active");
+            } else {
+                el.classList.remove("is-active");
+            }
+        });
+    }
+
+    // 初回実行（ページロード時）
+    checkFade();
+
+    // スクロール時にも実行
+    window.addEventListener("scroll", checkFade);
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const fades = document.querySelectorAll(".smooth");
+
+    function checkFade() {
+        const scroll = window.scrollY;
+        const wHeight = window.innerHeight;
+
+        fades.forEach((el) => {
+            const hit = el.getBoundingClientRect().top + scroll;
+            let customTop = 100;
+            const fadeAttr = el.dataset.fade;
+
+            if (fadeAttr !== undefined) {
+                customTop = Number(fadeAttr);
+            }
+
+            if (hit + customTop < wHeight + scroll) {
+                el.classList.add("is-active");
+            }
+        });
+    }
+
+    // 初回実行（ページロード時）
+    checkFade();
+
+    // スクロール時にも実行
+    window.addEventListener("scroll", checkFade);
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const target = document.querySelector(".bg_fade");
+    const background = document.querySelector(".background.bk");
+    const blackImages = document.querySelectorAll(".black__image");
+
+    if (!target || !background) return;
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    background.classList.add("active");
+                    blackImages.forEach((img) => img.classList.add("active"));
+                } else {
+                    background.classList.remove("active");
+                    blackImages.forEach((img) => img.classList.remove("active"));
+                }
+            });
+        },
+        { threshold: 0.1 }
+    );
+
+    observer.observe(target);
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+
+    const body = document.getElementById("body");
+    const intro = document.querySelector(".intro-screen");
+    const video = document.getElementById("heroVideo");
+    const logo = document.querySelector(".logo-white");
+    const bg = document.querySelector(".hero-bg");
+    const mv = document.querySelector(".main_visual");
+
+    body.style.overflow = "hidden";
+
+    // GIFを3秒表示してフェードアウト
+    setTimeout(() => {
+        intro.classList.add("fade-out");
+    }, 1500);
+
+    // 1.5秒後に動画再生
+    setTimeout(() => {
+        logo.classList.add("fade-in");
+        video.play();
+    }, 1500 + 1500);
+
+    // 1.5秒後に動画再生
+    setTimeout(() => {
+        video.classList.add("fade-in");
+        bg.classList.add("fade-out");
+        body.style.overflow = "scroll";
+        video.play();
+    }, 3000 + 1500);
+
+
+    // 初期位置を一度だけ計算
+    let positions = null;
+
+    function calculatePositions() {
+        const firstView = document.querySelector("#main .first-view .main_visual");
+        const startPos = firstView.offsetTop; // ページ上端からの絶対位置
+        const endPos = startPos + firstView.offsetHeight - window.innerHeight;
+
+        return { startPos, endPos };
+    }
+
+    window.addEventListener("scroll", () => {
+        const firstView = document.querySelector("#main .first-view .main_visual");
+        const mvImage = document.querySelector("#main .first-view .main_visual .main_visual-image");
+
+        // 初回または画面リサイズ時のみ再計算
+        if (!positions) {
+            positions = calculatePositions();
+        }
+
+        const scroll = window.scrollY;
+        const { startPos, endPos } = positions;
+
+        if (scroll <= startPos) {
+            Object.assign(mvImage.style, {
+                position: "fixed",
+                bottom: "50%",
+                top: "50%",
+                translate: "-50% -50%"
+            });
+            firstView.classList.remove("shrink");
+
+        } else if (scroll < endPos) {
+            Object.assign(mvImage.style, {
+                position: "fixed",
+                bottom: "50%",
+                top: "50%",
+                translate: "-50% -50%"
+            });
+            firstView.classList.add("shrink");
+
+        } else {
+            const firstViewHeight = firstView.offsetHeight;
+            const mvImageHeight = mvImage.offsetHeight;
+            const topPosition = firstViewHeight - mvImageHeight;
+
+            Object.assign(mvImage.style, {
+                position: "absolute",
+                bottom: "auto",
+                top: `${topPosition}px`,
+                translate: "-50% 0"
+            });
+            firstView.classList.add("shrink");
+        }
+    });
+
+    // リサイズ時に再計算
+    window.addEventListener("resize", () => {
+        positions = null;
+    });
+
 });
