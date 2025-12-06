@@ -194,13 +194,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // 要素の取得
     const modal = document.getElementById('lesson__modal');
     const closeBtn = document.getElementById('closeModalBtn');
-
     const openBtn = document.querySelectorAll('.modal__open');
 
     openBtn.forEach(open => {
         open.addEventListener('click', () => {
             modal.style.display = 'block';
-            modalImg.src = open.dataset.src;
+
+            modalImg.src = open.dataset.src + '.png';
+            modalVideo.src = open.dataset.src + '.mp4';
+            modalVideoContent.src = open.dataset.src + '.mp4';
         });
     });
 
@@ -269,6 +271,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
     const fades = document.querySelectorAll(".bg_fade");
+    const black__image = document.querySelectorAll(".black__image");
+    const background = document.querySelector(".background.bk");
 
     function checkFade() {
         const scroll = window.scrollY;
@@ -276,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         fades.forEach((el) => {
             const hit = el.getBoundingClientRect().top + scroll;
-            let customTop = 100;
+            let customTop = 200;
             const fadeAttr = el.dataset.fade;
 
             if (fadeAttr !== undefined) {
@@ -285,10 +289,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // 範囲内に入ったら is-active を付与
             // 範囲外に出たら is-active を削除
-            if (hit + customTop < wHeight + scroll && hit + customTop + el.offsetHeight > scroll) {
+            const exitOffset = 600; // 好きな数値に調整（px）
+
+            if (
+                hit + customTop < wHeight + scroll &&
+                hit + customTop + el.offsetHeight > scroll + exitOffset
+            ) {
                 el.classList.add("is-active");
+                background.classList.add("active");
+                // black__image 全てに active を追加
+                black__image.forEach((img) => img.classList.add("active"));
             } else {
                 el.classList.remove("is-active");
+                background.classList.remove("active");
+                // black__image 全てから active を削除
+                black__image.forEach((img) => img.classList.remove("active"));
             }
         });
     }
@@ -330,30 +345,6 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("scroll", checkFade);
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const target = document.querySelector(".bg_fade");
-    const background = document.querySelector(".background.bk");
-    const blackImages = document.querySelectorAll(".black__image");
-
-    if (!target || !background) return;
-
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    background.classList.add("active");
-                    blackImages.forEach((img) => img.classList.add("active"));
-                } else {
-                    background.classList.remove("active");
-                    blackImages.forEach((img) => img.classList.remove("active"));
-                }
-            });
-        },
-        { threshold: 0.1 }
-    );
-
-    observer.observe(target);
-});
 
 window.addEventListener("DOMContentLoaded", () => {
 
@@ -362,46 +353,48 @@ window.addEventListener("DOMContentLoaded", () => {
     const video = document.getElementById("heroVideo");
     const logo = document.querySelector(".logo-white");
     const bg = document.querySelector(".hero-bg");
-    const mv = document.querySelector(".main_visual");
+    const hero_logo = document.querySelector(".hero-bg-logo");
 
     body.style.overflow = "hidden";
 
-    // GIFを3秒表示してフェードアウト
+    // GIFを1.5秒表示してフェードアウト
     setTimeout(() => {
         intro.classList.add("fade-out");
     }, 1500);
 
-    // 1.5秒後に動画再生
+    // 3秒後に動画再生
     setTimeout(() => {
-        logo.classList.add("fade-in");
+        video.classList.add("fade-in");
         video.play();
     }, 1500 + 1500);
 
-    // 1.5秒後に動画再生
+    // 4.5秒後に動画再生
     setTimeout(() => {
-        video.classList.add("fade-in");
+        logo.classList.add("fade-in");
+        hero_logo.classList.add("fade-in");
         bg.classList.add("fade-out");
-        body.style.overflow = "scroll";
-        video.play();
     }, 3000 + 1500);
 
+    // 5.5秒後に動画再生
+    setTimeout(() => {
+        body.style.overflow = "scroll";
+    }, 4500 + 1000);
 
-    // 初期位置を一度だけ計算
+
+    // 位置計算
     let positions = null;
 
     function calculatePositions() {
         const firstView = document.querySelector("#main .first-view .main_visual");
-        const startPos = firstView.offsetTop; // ページ上端からの絶対位置
+        const startPos = firstView.offsetTop;
         const endPos = startPos + firstView.offsetHeight - window.innerHeight;
-
         return { startPos, endPos };
     }
 
-    window.addEventListener("scroll", () => {
+    function handleScroll() {
         const firstView = document.querySelector("#main .first-view .main_visual");
         const mvImage = document.querySelector("#main .first-view .main_visual .main_visual-image");
 
-        // 初回または画面リサイズ時のみ再計算
         if (!positions) {
             positions = calculatePositions();
         }
@@ -440,11 +433,20 @@ window.addEventListener("DOMContentLoaded", () => {
             });
             firstView.classList.add("shrink");
         }
-    });
+    }
+
+    // =========================
+    // 初回実行で縮小判定も行う
+    // =========================
+    handleScroll();
+
+    // スクロールイベント
+    window.addEventListener("scroll", handleScroll);
 
     // リサイズ時に再計算
     window.addEventListener("resize", () => {
         positions = null;
+        handleScroll(); // <- これも呼ぶとより安全
     });
 
 });
