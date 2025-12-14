@@ -1126,8 +1126,8 @@ body.menu-open .menu-btn img.white {
 .cta__btn a::after {
     content: "";
     position: absolute;
-    width: calc(570 * (100vw / 750));
-    height: calc(145 * (100vw / 750));
+    width: calc(560 * (100vw / 750));
+    height: calc(140 * (100vw / 750));
     border-radius: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
     left: 49%;
