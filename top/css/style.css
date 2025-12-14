@@ -575,7 +575,8 @@ body.menu-open .menu-btn img.white {
 }
 
 #main .concept .point .cta__btn {
-    width: calc(750*(100vw/750));
+    width: calc(650*(100vw/750));
+    height: calc(320*(100vw/750));
     margin-top: calc(40*(100vw/750));
     margin-inline: auto;
     position: relative;
@@ -642,6 +643,11 @@ body.menu-open .menu-btn img.white {
     -ms-overflow-style: none;
 }
 
+#main .lesson .section__slider--wrap::-webkit-scrollbar {
+    /* Chrome / Safari / iOS */
+    display: none;
+}
+
 #main .lesson .section__slider li:nth-child(1) {
     margin-left: calc(50*(100vw/750));
 }
@@ -705,6 +711,9 @@ body.menu-open .menu-btn img.white {
 
 #main .lesson .cta__btn {
     position: relative;
+    width: calc(650*(100vw/750));
+    height: calc(320*(100vw/750));
+    margin-inline: auto;
 }
 
 #main .lesson .cta__attention {
@@ -731,6 +740,30 @@ body.menu-open .menu-btn img.white {
 
 #main .price .price__slider--wrap {
     overflow-x: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    cursor: grab;
+}
+
+#main .price .price__slider--wrap {
+    overflow-x: auto;
+    cursor: grab;
+}
+
+#main .price .price__slider--wrap.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+}
+
+/* 画像のゴーストドラッグ防止 */
+#main .price .price__slider--wrap img {
+    -webkit-user-drag: none;
+    user-drag: none;
+}
+
+#main .price .price__slider--wrap::-webkit-scrollbar {
+    /* Chrome / Safari / iOS */
+    display: none;
 }
 
 #main .price .price__slider {
@@ -926,6 +959,11 @@ body.menu-open .menu-btn img.white {
     color: #666;
     font-size: calc(24*(100vw/750));
     line-height: 1.75;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+
+    overflow: hidden;
 }
 
 #main .infomation .column .more {
@@ -999,15 +1037,24 @@ body.menu-open .menu-btn img.white {
 }
 
 #main .infomation .banner {
-    width: calc(600*(100vw/750));
-    height: calc(185*(100vw/750));
     margin-inline: auto;
     margin-top: calc(100*(100vw/750));
 }
 
 #main .infomation .banner .banner__list {
     display: grid;
+    padding-inline: calc(70*(100vw/750));
     gap: calc(25*(100vw/750));
+    grid-template-rows: repeat(3, auto);
+    grid-auto-flow: column;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    cursor: grab;
+}
+
+#main .infomation .banner .banner__list li {
+    width: calc(600*(100vw/750));
 }
 
 /* アニメーション */
@@ -1045,6 +1092,70 @@ body.menu-open .menu-btn img.white {
 .smooth.is-active {
     clip-path: inset(0);
     transition-delay: 0.5s;
+}
+
+.scroll-x {
+    overflow-x: auto;
+    cursor: grab;
+}
+
+.scroll-x.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+}
+
+.scroll-x img {
+    user-drag: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+    /* クリック不要ならこれが最強 */
+}
+
+.cta__btn img {
+    animation: ctaPulse 1.8s ease-in-out infinite;
+    transform-origin: center;
+    position: relative;
+}
+
+
+.cta__btn a {
+    position: relative;
+    transition: opacity 1s;
+}
+
+.cta__btn a::after {
+    content: "";
+    position: absolute;
+    width: calc(570 * (100vw / 750));
+    height: calc(145 * (100vw / 750));
+    border-radius: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    left: 49%;
+    top: calc(-180 * (100vw / 750));
+    translate: -50% 0;
+    animation: ctaPulse 1.8s ease-in-out infinite;
+    transform-origin: center;
+    z-index: -1;
+    overflow: hidden;
+    box-shadow: 0 0 calc(30*(100vw/750)) 0 rgba(0, 0, 0, 0.5);
+}
+
+.cta__btn a:hover {
+    opacity: 0.5;
+}
+
+@keyframes ctaPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 /* footer */
@@ -1220,8 +1331,10 @@ body.menu-open .menu-btn img.white {
     #header .pc__menu .right .message {
         position: absolute;
         right: 0;
-        width: 383px;
-        height: 374px;
+        width: calc(460*(100vw/1920));
+        max-width: 460px;
+        height: calc(355*(100vw/1920));
+        max-height: 355px;
         top: 50%;
         right: 5%;
         translate: 0 -50%;
@@ -1554,7 +1667,8 @@ body.menu-open .menu-btn img.white {
     }
 
     #main .concept .point .cta__btn {
-        width: 375px;
+        width: 325px;
+        height: 160px;
         margin-top: 20px;
     }
 
@@ -1591,12 +1705,6 @@ body.menu-open .menu-btn img.white {
         margin-bottom: 22.5px;
     }
 
-    #main .lesson .section__slider--wrap {
-        overflow-x: scroll;
-        scrollbar-width: auto;
-        -ms-overflow-style: auto;
-    }
-
     #main .lesson .section__slider li:nth-child(1) {
         margin-left: 25px;
     }
@@ -1624,6 +1732,11 @@ body.menu-open .menu-btn img.white {
         right: 22px;
         top: 19px;
         width: 31px;
+    }
+
+    #main .lesson .cta__btn {
+        width: 325px;
+        height: 160px;
     }
 
     #main .lesson .cta__attention {
@@ -1823,13 +1936,24 @@ body.menu-open .menu-btn img.white {
     }
 
     #main .infomation .banner {
-        width: 300px;
-        height: 92.5px;
         margin-top: 50px;
     }
 
     #main .infomation .banner .banner__list {
         gap: 12.5px;
+        padding-inline: 35px;
+    }
+
+    #main .infomation .banner .banner__list li {
+        width: 300px;
+    }
+
+    .cta__btn a::after {
+        width: 285px;
+        height: 72.5px;
+        left: 49%;
+        top: -90px;
+        box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.5);
     }
 
     /* footer */
