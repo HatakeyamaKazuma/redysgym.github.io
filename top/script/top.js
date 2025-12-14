@@ -450,3 +450,92 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const sliders = document.querySelectorAll(".scroll-x");
+
+    sliders.forEach((slider) => {
+        let isDown = false;
+        let startX = 0;
+        let scrollLeft = 0;
+
+        slider.addEventListener("mousedown", (e) => {
+            isDown = true;
+            slider.classList.add("is-dragging");
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+
+        slider.addEventListener("mouseleave", () => {
+            isDown = false;
+            slider.classList.remove("is-dragging");
+        });
+
+        slider.addEventListener("mouseup", () => {
+            isDown = false;
+            slider.classList.remove("is-dragging");
+        });
+
+        slider.addEventListener("mousemove", (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 1.5; // スピード調整
+            slider.scrollLeft = scrollLeft - walk;
+        });
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const targets = document.querySelectorAll(
+        ".price__slider--wrap, #main .infomation .banner .banner__list"
+    );
+
+    targets.forEach((slider) => {
+        let isDown = false;
+        let startX = 0;
+        let scrollLeft = 0;
+        let isDragging = false;
+
+        slider.addEventListener("mousedown", (e) => {
+            isDown = true;
+            isDragging = false;
+            startX = e.pageX;
+            scrollLeft = slider.scrollLeft;
+        });
+
+        slider.addEventListener("mousemove", (e) => {
+            if (!isDown) return;
+
+            const dx = e.pageX - startX;
+
+            if (Math.abs(dx) > 5) {
+                isDragging = true;
+                e.preventDefault();
+                slider.scrollLeft = scrollLeft - dx;
+            }
+        });
+
+        slider.addEventListener("mouseup", () => {
+            isDown = false;
+        });
+
+        slider.addEventListener("mouseleave", () => {
+            isDown = false;
+        });
+
+        // ドラッグしたときだけリンクを止める
+        slider.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("mousedown", (e) => {
+                e.preventDefault(); // aが先に掴むのを防ぐ
+            });
+
+            link.addEventListener("click", (e) => {
+                if (isDragging) {
+                    e.preventDefault();
+                }
+            });
+        });
+    });
+});
