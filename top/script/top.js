@@ -3,8 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const sideMenu = document.getElementById("sideMenu");
     const overlay = document.getElementById("overlay");
 
-    if (!menuBtn || !sideMenu || !overlay) return;
-
     menuBtn.addEventListener("click", () => {
         const isOpen = document.body.classList.contains("menu-open");
         if (isOpen) {
@@ -14,7 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    overlay.addEventListener("click", closeMenu);
+    if (overlay) {
+        overlay.addEventListener("click", closeMenu);
+    }
 
     function openMenu() {
         document.body.classList.add("menu-open");
