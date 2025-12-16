@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // メニューボタン
     const menuBtn = document.querySelector(".menu-btn");
     const sideMenu = document.getElementById("sideMenu");
     const overlay = document.getElementById("overlay");
+
+    if (!menuBtn || !sideMenu || !overlay) return;
 
     menuBtn.addEventListener("click", () => {
         const isOpen = document.body.classList.contains("menu-open");
@@ -27,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         overlay.classList.remove("show");
     }
 });
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const logoWhite = document.querySelector('.logo-white');
