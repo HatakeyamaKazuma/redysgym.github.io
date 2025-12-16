@@ -12,20 +12,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    if (overlay) {
-        overlay.addEventListener("click", closeMenu);
-    }
-
     function openMenu() {
         document.body.classList.add("menu-open");
-        sideMenu.classList.add("open");
-        overlay.classList.add("show");
+        // Nullチェックを追加: 要素が存在する場合にのみクラスを操作する
+        if (sideMenu) {
+            sideMenu.classList.add("open");
+        }
+        if (overlay) {
+            overlay.classList.add("show");
+        }
     }
 
     function closeMenu() {
         document.body.classList.remove("menu-open");
-        sideMenu.classList.remove("open");
-        overlay.classList.remove("show");
+        // Nullチェックを追加
+        if (sideMenu) {
+            sideMenu.classList.remove("open");
+        }
+        if (overlay) {
+            overlay.classList.remove("show");
+        }
+    }
+
+    if (overlay) {
+        overlay.addEventListener("click", closeMenu);
     }
 });
 
