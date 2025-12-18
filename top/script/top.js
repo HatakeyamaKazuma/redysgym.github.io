@@ -458,17 +458,46 @@ window.addEventListener("DOMContentLoaded", () => {
     // =========================
     // 初回実行で縮小判定も行う
     // =========================
+    // 1. 最初の実行（DOMContentLoaded直後）
     handleScroll();
 
-    // スクロールイベント
+    // 2. スクロールイベント
     window.addEventListener("scroll", handleScroll);
 
-    // ページ読み込み（load）から4.5秒後に1回だけ実行する
+    // 3. 読み込み完了後（4.5秒後）
     window.addEventListener("load", () => {
         setTimeout(() => {
+            // ここでも念のためリセットしてから実行
+            const firstView = document.querySelector("#main .first-view .main_visual");
+            if (window.scrollY < (positions ? positions.endPos : 0)) {
+                firstView.style.height = "";
+            }
+            positions = null;
             handleScroll();
         }, 4500);
     });
+
+    // 4. リサイズイベント（ここが一番の修正ポイント）
+    let lastWidth = window.innerWidth; // 起動時の横幅をメモしておく
+
+    window.addEventListener("resize", () => {
+        const currentWidth = window.innerWidth;
+
+        // 横幅が変わっていない＝URLバーが出入りしただけの「高さのみの変化」なら無視する
+        if (currentWidth === lastWidth) {
+            return;
+        }
+
+        // 横幅が変わった場合（画面回転など）のみ再計算を実行
+        lastWidth = currentWidth; // 新しい横幅を保存
+
+        const firstView = document.querySelector("#main .first-view .main_visual");
+        firstView.style.height = ""; // JSで付けた高さをリセット
+
+        positions = null; // calculatePositionsをやり直させる
+        handleScroll();
+    });
+
 });
 
 document.addEventListener("DOMContentLoaded", () => {
