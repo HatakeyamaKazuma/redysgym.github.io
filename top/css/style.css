@@ -267,7 +267,7 @@ body.menu-open .menu-btn img.white {
 }
 
 #main .first-view {
-    height: calc(2500*(100vw/750));
+    height: calc(2300*(100vw/750));
     margin-inline: auto;
     margin-bottom: calc(-50*(100vw/750));
     position: relative;
@@ -284,6 +284,7 @@ body.menu-open .menu-btn img.white {
 
 #main .first-view .main_visual.shrink {
     z-index: 2;
+    height: calc(1860 * (100vw / 750));
 }
 
 #main .first-view .main_visual .main_visual-image {
@@ -293,7 +294,9 @@ body.menu-open .menu-btn img.white {
     top: 50%;
     left: 50%;
     translate: -50% -50%;
-    transition: 0.5s ease;
+    /* 修正箇所：all ではなく、変化させたいプロパティだけを列挙する */
+    transition: width 0.5s ease, height 0.5s ease, border-radius 0.5s ease;
+    will-change: position, top, transform;
 }
 
 #main .first-view .main_visual.shrink .main_visual-image {
@@ -1043,11 +1046,13 @@ body.menu-open .menu-btn img.white {
 
 #main .infomation .banner .banner__list {
     display: grid;
-    padding-inline: calc(70*(100vw/750));
-    gap: calc(25*(100vw/750));
-    grid-template-rows: repeat(3, auto);
-    grid-auto-flow: column;
-    overflow-x: scroll;
+    padding-inline: calc(70 * (100vw / 750));
+    gap: calc(25 * (100vw / 750));
+    height: calc(700 * (100vw / 750));
+    /* grid-template-rows: repeat(3, auto); */
+    /* grid-auto-flow: column; */
+    overflow-y: scroll;
+    overflow-x: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
     cursor: grab;
@@ -1444,7 +1449,7 @@ body.menu-open .menu-btn img.white {
     }
 
     #main .first-view {
-        height: 1250px;
+        height: 1050px;
         margin-inline: auto;
         margin-bottom: -25px;
         position: relative;
@@ -1458,6 +1463,10 @@ body.menu-open .menu-btn img.white {
         z-index: 12;
     }
 
+    #main .first-view .main_visual.shrink {
+        height: 808px;
+    }
+
     #main .first-view .main_visual .main_visual-image {
         width: 100%;
         height: 666px;
@@ -1466,6 +1475,7 @@ body.menu-open .menu-btn img.white {
         left: 50%;
         translate: -50% -50%;
         transition: 0.5s ease;
+        will-change: position, top, transform;
     }
 
     #main .first-view .main_visual.shrink .main_visual-image {
@@ -1940,6 +1950,7 @@ body.menu-open .menu-btn img.white {
     }
 
     #main .infomation .banner .banner__list {
+        height: 350px;
         gap: 12.5px;
         padding-inline: 35px;
     }
