@@ -458,22 +458,37 @@ window.addEventListener("DOMContentLoaded", () => {
     // =========================
     // 初回実行で縮小判定も行う
     // =========================
+    // 1. 最初の実行（DOMContentLoaded直後）
     handleScroll();
 
-    // スクロールイベント
+    // 2. スクロールイベント
     window.addEventListener("scroll", handleScroll);
 
-    // ページ読み込み（load）から4.5秒後に1回だけ実行する
+    // 3. 読み込み完了後（4.5秒後）
     window.addEventListener("load", () => {
         setTimeout(() => {
+            // ここでも念のためリセットしてから実行
+            const firstView = document.querySelector("#main .first-view .main_visual");
+            if (window.scrollY < (positions ? positions.endPos : 0)) {
+                firstView.style.height = "";
+            }
+            positions = null;
             handleScroll();
         }, 4500);
     });
 
-    // リサイズ時に再計算
+    // 4. リサイズイベント（ここが一番の修正ポイント）
+    let resizeTimer;
     window.addEventListener("resize", () => {
-        positions = null;
-        handleScroll(); // <- これも呼ぶとより安全
+        // リサイズ中に連続実行されるのを防ぐ（デバウンス）
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            const firstView = document.querySelector("#main .first-view .main_visual");
+            // JSで付けた高さを一度消さないと、calculatePositionsが「縮んだ後の高さ」を測ってしまう
+            firstView.style.height = "";
+            positions = null;
+            handleScroll();
+        }, 200);
     });
 
 });
