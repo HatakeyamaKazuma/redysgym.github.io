@@ -469,22 +469,6 @@ window.addEventListener("DOMContentLoaded", () => {
             handleScroll();
         }, 4500);
     });
-
-    // リサイズ時に再計算
-    let lastWidth = window.innerWidth;
-    window.addEventListener("resize", () => {
-        const currentWidth = window.innerWidth;
-        // 横幅が変わっていない＝URLバーが出入りしただけの「高さのみの変化」なら無視する
-        if (currentWidth === lastWidth) {
-            return;
-        }
-        // 横幅が変わった場合（画面回転など）のみ再計算を実行
-        lastWidth = currentWidth; // 新しい横幅を保存
-
-        positions = null;
-        handleScroll();
-    });
-
 });
 
 document.addEventListener("DOMContentLoaded", () => {
