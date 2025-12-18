@@ -86,8 +86,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.addEventListener('scroll', updateClip);
-    window.addEventListener('resize', updateClip); // リサイズ時も更新
+    window.addEventListener('resize', updateClip); // リサイズ時も更新// ページ読み込み（load）から4.5秒後に1回だけ実行する
     updateClip(); // 初期状態で呼ぶ
+    window.addEventListener("load", () => {
+        setTimeout(() => {
+            updateClip();
+        }, 5000);
+    });
 
     // swiper
     const concept__swiper = new Swiper(".concept__swiper", {
@@ -384,6 +389,7 @@ window.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
         logo.classList.add("fade-in");
         hero_logo.classList.add("fade-in");
+
         bg.classList.add("fade-out");
     }, 3000 + 1500);
 
@@ -433,16 +439,22 @@ window.addEventListener("DOMContentLoaded", () => {
             firstView.classList.add("shrink");
 
         } else {
-            // 計算式： 「固定が終わる位置(endPos)」＋「画面の半分の高さ」
-            // これで fixed: 50% の時の見た目上の位置とピタリと一致します。
             const absoluteTop = endPos + (window.innerHeight / 2);
+
+            // 2. 画像の「高さの半分」を取得（下端を割り出すため）
+            const mvImageHeight = mvImage.offsetHeight;
+
+            // 3. 【ここが本題】サイト最上部から画像の下端までの高さを計算
+            const finalHeight = absoluteTop + (mvImageHeight / 2);
 
             Object.assign(mvImage.style, {
                 position: "absolute",
                 bottom: "auto",
-                top: `${absoluteTop}px`, // 計算した絶対座標
-                translate: "-50% -50%"   // fixedの時と合わせる
+                top: `${absoluteTop}px`,
+                translate: "-50% -50%"
             });
+
+            firstView.style.height = `${finalHeight}px`;
             firstView.classList.add("shrink");
         }
     }
@@ -454,6 +466,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // スクロールイベント
     window.addEventListener("scroll", handleScroll);
+
+    // ページ読み込み（load）から4.5秒後に1回だけ実行する
+    window.addEventListener("load", () => {
+        setTimeout(() => {
+            handleScroll();
+        }, 4500);
+    });
 
     // リサイズ時に再計算
     window.addEventListener("resize", () => {
