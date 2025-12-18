@@ -433,15 +433,15 @@ window.addEventListener("DOMContentLoaded", () => {
             firstView.classList.add("shrink");
 
         } else {
-            const firstViewHeight = firstView.offsetHeight;
-            const mvImageHeight = mvImage.offsetHeight;
-            const topPosition = firstViewHeight - mvImageHeight;
+            // 計算式： 「固定が終わる位置(endPos)」＋「画面の半分の高さ」
+            // これで fixed: 50% の時の見た目上の位置とピタリと一致します。
+            const absoluteTop = endPos + (window.innerHeight / 2);
 
             Object.assign(mvImage.style, {
                 position: "absolute",
                 bottom: "auto",
-                top: `${topPosition}px`,
-                translate: "-50% 0"
+                top: `${absoluteTop}px`, // 計算した絶対座標
+                translate: "-50% -50%"   // fixedの時と合わせる
             });
             firstView.classList.add("shrink");
         }
