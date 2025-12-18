@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.addEventListener('scroll', updateClip);
-    window.addEventListener('resize', updateClip); // リサイズ時も更新// ページ読み込み（load）から4.5秒後に1回だけ実行する
+    window.addEventListener('resize', updateClip); // リサイズ時も更新
     updateClip(); // 初期状態で呼ぶ
     window.addEventListener("load", () => {
         setTimeout(() => {
@@ -439,12 +439,8 @@ window.addEventListener("DOMContentLoaded", () => {
             firstView.classList.add("shrink");
 
         } else {
-            const absoluteTop = endPos + (window.innerHeight / 2);
-
-            // 2. 画像の「高さの半分」を取得（下端を割り出すため）
+            const absoluteTop = positions.endPos + (window.innerHeight / 2);
             const mvImageHeight = mvImage.offsetHeight;
-
-            // 3. 【ここが本題】サイト最上部から画像の下端までの高さを計算
             const finalHeight = absoluteTop + (mvImageHeight / 2);
 
             Object.assign(mvImage.style, {
