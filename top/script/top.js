@@ -372,32 +372,52 @@ window.addEventListener("DOMContentLoaded", () => {
     const bg = document.querySelector(".hero-bg");
     const hero_logo = document.querySelector(".hero-bg-logo");
 
-    body.style.overflow = "hidden";
+    // セッションストレージで訪問済みかチェック
+    const hasVisited = sessionStorage.getItem('hasVisited');
 
-    // GIFを1.5秒表示してフェードアウト
-    setTimeout(() => {
-        intro.classList.add("fade-out");
-    }, 1500);
+    if (!hasVisited) {
+        // --- 初回訪問時の処理（アニメーションあり） ---
+        body.style.overflow = "hidden";
 
-    // 3秒後に動画再生
-    setTimeout(() => {
-        video.classList.add("fade-in");
-        video.play();
-    }, 1500 + 1500);
+        setTimeout(() => {
+            intro.classList.add("fade-out");
+        }, 1500);
 
-    // 4.5秒後に動画再生
-    setTimeout(() => {
-        logo.classList.add("fade-in");
-        hero_logo.classList.add("fade-in");
+        setTimeout(() => {
+            video.classList.add("fade-in");
+            video.play();
+        }, 3000);
 
-        bg.classList.add("fade-out");
-    }, 3000 + 1500);
+        setTimeout(() => {
+            logo.classList.add("fade-in");
+            hero_logo.classList.add("fade-in");
+            bg.classList.add("fade-out");
+        }, 4500);
 
-    // 5.5秒後に動画再生
-    setTimeout(() => {
+        setTimeout(() => {
+            body.style.overflow = "scroll";
+            // アニメーションが終わる頃にフラグをセット
+            sessionStorage.setItem('hasVisited', 'true');
+        }, 5500);
+
+    } else {
+        // --- 2回目以降の処理（アニメーションをスキップ） ---
+        // すぐに表示状態にする
+        if (intro) intro.style.display = "none";
+        if (video) {
+            video.classList.add("fade-in");
+            video.play(); // 動画は再生する場合
+        }
+        if (logo) logo.classList.add("fade-in");
+        if (hero_logo) hero_logo.classList.add("fade-in");
+        if (bg) bg.style.display = "none";
+
         body.style.overflow = "scroll";
-    }, 4500 + 1000);
+    }
 
+    // ==========================================
+    // スクロール・リサイズ処理
+    // ==========================================
 
     // 位置計算
     let positions = null;
